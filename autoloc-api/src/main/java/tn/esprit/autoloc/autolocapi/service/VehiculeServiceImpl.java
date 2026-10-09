@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.autolocapi.domain.CategorieVehicule;
 import tn.esprit.autoloc.autolocapi.domain.StatutVehicule;
 import tn.esprit.autoloc.autolocapi.domain.Vehicule;
-import tn.esprit.autoloc.autolocapi.repository.VehiculeRepository;
+import tn.esprit.autoloc.autolocapi.repository.IVehiculeRepository;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
 @Slf4j
 public class VehiculeServiceImpl implements IVehiculeService {
 
-    private final VehiculeRepository vehiculeRepository;
+    private final IVehiculeRepository vehiculeRepository;
 
     @Override
     public List<Vehicule> retrieveAllVehicules() {

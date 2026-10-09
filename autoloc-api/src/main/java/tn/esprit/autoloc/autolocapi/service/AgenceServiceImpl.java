@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.autolocapi.domain.Agence;
-import tn.esprit.autoloc.autolocapi.repository.AgenceRepository;
+import tn.esprit.autoloc.autolocapi.repository.IAgenceRepository;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 public class AgenceServiceImpl implements IAgenceService {
 
-    private final AgenceRepository agenceRepository;
+    private final IAgenceRepository agenceRepository;
 
     @Override
     public List<Agence> retrieveAllAgences() {

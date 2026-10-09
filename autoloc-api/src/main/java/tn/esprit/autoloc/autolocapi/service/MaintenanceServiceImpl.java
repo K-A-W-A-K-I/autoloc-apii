@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.autolocapi.domain.Maintenance;
-import tn.esprit.autoloc.autolocapi.repository.MaintenanceRepository;
+import tn.esprit.autoloc.autolocapi.repository.IMaintenanceRepository;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 public class MaintenanceServiceImpl implements IMaintenanceService {
 
-    private final MaintenanceRepository maintenanceRepository;
+    private final IMaintenanceRepository maintenanceRepository;
 
     @Override
     public List<Maintenance> retrieveAllMaintenances() {

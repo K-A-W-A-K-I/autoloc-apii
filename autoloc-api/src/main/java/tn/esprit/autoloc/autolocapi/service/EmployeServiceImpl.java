@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.autolocapi.domain.Employe;
 import tn.esprit.autoloc.autolocapi.domain.RoleEmploye;
-import tn.esprit.autoloc.autolocapi.repository.EmployeRepository;
+import tn.esprit.autoloc.autolocapi.repository.IEmployeRepository;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
 @Slf4j
 public class EmployeServiceImpl implements IEmployeService {
 
-    private final EmployeRepository employeRepository;
+    private final IEmployeRepository employeRepository;
 
     @Override
     public List<Employe> retrieveAllEmployes() {

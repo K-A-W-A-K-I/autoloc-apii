@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.autolocapi.domain.Equipement;
-import tn.esprit.autoloc.autolocapi.repository.EquipementRepository;
+import tn.esprit.autoloc.autolocapi.repository.IEquipementRepository;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 public class EquipementServiceImpl implements IEquipementService {
 
-    private final EquipementRepository equipementRepository;
+    private final IEquipementRepository equipementRepository;
 
     @Override
     public List<Equipement> retrieveAllEquipements() {

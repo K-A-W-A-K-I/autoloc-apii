@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.autolocapi.domain.Client;
-import tn.esprit.autoloc.autolocapi.repository.ClientRepository;
+import tn.esprit.autoloc.autolocapi.repository.IClientRepository;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 public class ClientServiceImpl implements IClientService {
 
-    private final ClientRepository clientRepository;
+    private final IClientRepository clientRepository;
 
     @Override
     public List<Client> retrieveAllClients() {

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.autolocapi.domain.Paiement;
-import tn.esprit.autoloc.autolocapi.repository.PaiementRepository;
+import tn.esprit.autoloc.autolocapi.repository.IPaiementRepository;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 public class PaiementServiceImpl implements IPaiementService {
 
-    private final PaiementRepository paiementRepository;
+    private final IPaiementRepository paiementRepository;
 
     @Override
     public List<Paiement> retrieveAllPaiements() {

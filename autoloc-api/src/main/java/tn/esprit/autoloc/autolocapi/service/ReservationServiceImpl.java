@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.autolocapi.domain.Reservation;
 import tn.esprit.autoloc.autolocapi.domain.StatutReservation;
-import tn.esprit.autoloc.autolocapi.repository.ReservationRepository;
+import tn.esprit.autoloc.autolocapi.repository.IReservationRepository;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
 @Slf4j
 public class ReservationServiceImpl implements IReservationService {
 
-    private final ReservationRepository reservationRepository;
+    private final IReservationRepository reservationRepository;
 
     @Override
     public List<Reservation> retrieveAllReservations() {
