@@ -7,12 +7,10 @@ import tn.esprit.autoloc.autolocapi.domain.Employe;
 import tn.esprit.autoloc.autolocapi.domain.RoleEmploye;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface EmployeRepository extends JpaRepository<Employe, Long> {
-    Optional<Employe> findByEmail(String email);
     List<Employe> findByAgence(Agence agence);
     List<Employe> findByRole(RoleEmploye role);
-    boolean existsByEmail(String email);
+    List<Employe> findByNomAndPrenom(String nom, String prenom);
 }
