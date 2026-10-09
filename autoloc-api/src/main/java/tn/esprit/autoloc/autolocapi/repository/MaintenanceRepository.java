@@ -13,8 +13,8 @@ import java.util.List;
 public interface MaintenanceRepository extends JpaRepository<Maintenance, Long> {
     List<Maintenance> findByVehicule(Vehicule vehicule);
     
-    @Query("SELECT m FROM Maintenance m WHERE m.vehicule = :vehicule ORDER BY m.dateMaintenance DESC")
+    @Query("SELECT m FROM Maintenance m WHERE m.vehicule = :vehicule ORDER BY m.dateDebut DESC")
     List<Maintenance> findByVehiculeOrderByDateDesc(Vehicule vehicule);
     
-    List<Maintenance> findByDateMaintenanceBetween(LocalDate dateDebut, LocalDate dateFin);
+    List<Maintenance> findByDateDebutBetween(LocalDate dateDebut, LocalDate dateFin);
 }
