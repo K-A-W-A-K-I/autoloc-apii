@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-public interface MaintenanceRepository extends JpaRepository<Maintenance, Long> {
+public interface IMaintenanceRepository extends JpaRepository<Maintenance, Long> {
     List<Maintenance> findByVehicule(Vehicule vehicule);
     
     @Query("SELECT m FROM Maintenance m WHERE m.vehicule = :vehicule ORDER BY m.dateDebut DESC")

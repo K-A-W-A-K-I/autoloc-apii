@@ -7,6 +7,6 @@ import tn.esprit.autoloc.autolocapi.domain.Equipement;
 import java.util.Optional;
 
 @Repository
-public interface EquipementRepository extends JpaRepository<Equipement, Long> {
+public interface IEquipementRepository extends JpaRepository<Equipement, Long> {
     Optional<Equipement> findByLibelle(String libelle);
 }

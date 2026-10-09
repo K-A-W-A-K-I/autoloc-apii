@@ -9,7 +9,7 @@ import tn.esprit.autoloc.autolocapi.domain.RoleEmploye;
 import java.util.List;
 
 @Repository
-public interface EmployeRepository extends JpaRepository<Employe, Long> {
+public interface IEmployeRepository extends JpaRepository<Employe, Long> {
     List<Employe> findByAgence(Agence agence);
     List<Employe> findByRole(RoleEmploye role);
     List<Employe> findByNomAndPrenom(String nom, String prenom);

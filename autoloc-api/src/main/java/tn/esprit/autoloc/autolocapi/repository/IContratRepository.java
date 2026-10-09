@@ -8,6 +8,6 @@ import tn.esprit.autoloc.autolocapi.domain.Reservation;
 import java.util.Optional;
 
 @Repository
-public interface ContratRepository extends JpaRepository<Contrat, Long> {
+public interface IContratRepository extends JpaRepository<Contrat, Long> {
     Optional<Contrat> findByReservation(Reservation reservation);
 }

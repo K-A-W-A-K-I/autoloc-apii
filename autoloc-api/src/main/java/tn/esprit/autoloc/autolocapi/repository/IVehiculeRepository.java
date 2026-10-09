@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface VehiculeRepository extends JpaRepository<Vehicule, Long> {
+public interface IVehiculeRepository extends JpaRepository<Vehicule, Long> {
     Optional<Vehicule> findByImmatriculation(String immatriculation);
     List<Vehicule> findByStatut(StatutVehicule statut);
     List<Vehicule> findByCategorie(CategorieVehicule categorie);

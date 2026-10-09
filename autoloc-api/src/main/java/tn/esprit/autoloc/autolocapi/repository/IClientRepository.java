@@ -7,7 +7,7 @@ import tn.esprit.autoloc.autolocapi.domain.Client;
 import java.util.Optional;
 
 @Repository
-public interface ClientRepository extends JpaRepository<Client, Long> {
+public interface IClientRepository extends JpaRepository<Client, Long> {
     Optional<Client> findByEmail(String email);
     Optional<Client> findByNumPermis(String numPermis);
     boolean existsByEmail(String email);
