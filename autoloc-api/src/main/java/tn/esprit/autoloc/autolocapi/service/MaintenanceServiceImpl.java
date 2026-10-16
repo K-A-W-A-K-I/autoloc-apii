@@ -1,43 +1,64 @@
 package tn.esprit.autoloc.autolocapi.service;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.autolocapi.domain.Maintenance;
+import tn.esprit.autoloc.autolocapi.exception.ResourceNotFoundException;
 import tn.esprit.autoloc.autolocapi.repository.IMaintenanceRepository;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
-@Slf4j
+@RequiredArgsConstructor
 public class MaintenanceServiceImpl implements IMaintenanceService {
 
     private final IMaintenanceRepository maintenanceRepository;
 
     @Override
-    public List<Maintenance> retrieveAllMaintenances() {
+    public Maintenance create(Maintenance maintenance) {
+        if (maintenance.getIdMaintenance() != null) {
+            throw new IllegalArgumentException(
+                    "Une nouvelle maintenance ne doit pas avoir d'identifiant");
+        }
+        if (maintenance.getDateFin() != null && maintenance.getDateDebut() != null
+                && maintenance.getDateFin().isBefore(maintenance.getDateDebut())) {
+            throw new IllegalArgumentException(
+                    "La date de fin ne peut pas être antérieure à la date de début");
+        }
+        return maintenanceRepository.save(maintenance);
+    }
+
+    @Override
+    public Maintenance findById(Long id) {
+        return maintenanceRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Maintenance", id));
+    }
+
+    @Override
+    public List<Maintenance> findAll() {
         return maintenanceRepository.findAll();
     }
 
     @Override
-    public Maintenance retrieveMaintenance(Long idMaintenance) {
-        return maintenanceRepository.findById(idMaintenance)
-                .orElseThrow(() -> new RuntimeException("Maintenance non trouvée"));
+    public Maintenance update(Long id, Maintenance maintenance) {
+        Maintenance existant = findById(id);
+        if (maintenance.getDateFin() != null && maintenance.getDateDebut() != null
+                && maintenance.getDateFin().isBefore(maintenance.getDateDebut())) {
+            throw new IllegalArgumentException(
+                    "La date de fin ne peut pas être antérieure à la date de début");
+        }
+        existant.setDateDebut(maintenance.getDateDebut());
+        existant.setDateFin(maintenance.getDateFin());
+        existant.setDescription(maintenance.getDescription());
+        existant.setVehicule(maintenance.getVehicule());
+        return maintenanceRepository.save(existant);
     }
 
     @Override
-    public Maintenance addMaintenance(Maintenance maintenance) {
-        return maintenanceRepository.save(maintenance);
-    }
-
-    @Override
-    public Maintenance updateMaintenance(Maintenance maintenance) {
-        return maintenanceRepository.save(maintenance);
-    }
-
-    @Override
-    public void removeMaintenance(Long idMaintenance) {
-        maintenanceRepository.deleteById(idMaintenance);
+    public void deleteById(Long id) {
+        if (!maintenanceRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Maintenance", id);
+        }
+        maintenanceRepository.deleteById(id);
     }
 }

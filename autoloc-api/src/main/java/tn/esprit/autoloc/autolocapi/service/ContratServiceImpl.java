@@ -1,43 +1,60 @@
 package tn.esprit.autoloc.autolocapi.service;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.math.BigDecimal;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.autolocapi.domain.Contrat;
+import tn.esprit.autoloc.autolocapi.exception.ResourceNotFoundException;
 import tn.esprit.autoloc.autolocapi.repository.IContratRepository;
 
-import java.util.List;
-
 @Service
-@AllArgsConstructor
-@Slf4j
+@RequiredArgsConstructor
 public class ContratServiceImpl implements IContratService {
 
     private final IContratRepository contratRepository;
 
     @Override
-    public List<Contrat> retrieveAllContrats() {
+    public Contrat create(Contrat contrat) {
+        if (contrat.getIdContrat() != null) {
+            throw new IllegalArgumentException(
+                    "Un nouveau contrat ne doit pas avoir d'identifiant");
+        }
+        if (contrat.getMontantTotal() != null && contrat.getMontantTotal().compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Le montant total ne peut pas être négatif");
+        }
+        return contratRepository.save(contrat);
+    }
+
+    @Override
+    public Contrat findById(Long id) {
+        return contratRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Contrat", id));
+    }
+
+    @Override
+    public List<Contrat> findAll() {
         return contratRepository.findAll();
     }
 
     @Override
-    public Contrat retrieveContrat(Long idContrat) {
-        return contratRepository.findById(idContrat)
-                .orElseThrow(() -> new RuntimeException("Contrat non trouvé"));
+    public Contrat update(Long id, Contrat contrat) {
+        Contrat existant = findById(id);
+        if (contrat.getMontantTotal() != null && contrat.getMontantTotal().compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Le montant total ne peut pas être négatif");
+        }
+        existant.setMontantTotal(contrat.getMontantTotal());
+        existant.setDateSignature(contrat.getDateSignature());
+        existant.setValide(contrat.isValide());
+        existant.setReservation(contrat.getReservation());
+        return contratRepository.save(existant);
     }
 
     @Override
-    public Contrat addContrat(Contrat contrat) {
-        return contratRepository.save(contrat);
-    }
-
-    @Override
-    public Contrat updateContrat(Contrat contrat) {
-        return contratRepository.save(contrat);
-    }
-
-    @Override
-    public void removeContrat(Long idContrat) {
-        contratRepository.deleteById(idContrat);
+    public void deleteById(Long id) {
+        if (!contratRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Contrat", id);
+        }
+        contratRepository.deleteById(id);
     }
 }

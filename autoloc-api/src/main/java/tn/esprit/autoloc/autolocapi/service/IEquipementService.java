@@ -5,9 +5,9 @@ import tn.esprit.autoloc.autolocapi.domain.Equipement;
 import java.util.List;
 
 public interface IEquipementService {
-    List<Equipement> retrieveAllEquipements();
-    Equipement retrieveEquipement(Long idEquipement);
-    Equipement addEquipement(Equipement equipement);
-    Equipement updateEquipement(Equipement equipement);
-    void removeEquipement(Long idEquipement);
+    Equipement create(Equipement equipement);
+    Equipement findById(Long id);
+    List<Equipement> findAll();
+    Equipement update(Long id, Equipement equipement);
+    void deleteById(Long id);
 }

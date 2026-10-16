@@ -1,49 +1,65 @@
 package tn.esprit.autoloc.autolocapi.service;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.autolocapi.domain.Reservation;
-import tn.esprit.autoloc.autolocapi.domain.StatutReservation;
+import tn.esprit.autoloc.autolocapi.exception.ResourceNotFoundException;
 import tn.esprit.autoloc.autolocapi.repository.IReservationRepository;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
-@Slf4j
+@RequiredArgsConstructor
 public class ReservationServiceImpl implements IReservationService {
 
     private final IReservationRepository reservationRepository;
 
     @Override
-    public List<Reservation> retrieveAllReservations() {
+    public Reservation create(Reservation reservation) {
+        if (reservation.getIdReservation() != null) {
+            throw new IllegalArgumentException(
+                    "Une nouvelle réservation ne doit pas avoir d'identifiant");
+        }
+        if (reservation.getDateFin() != null && reservation.getDateDebut() != null
+                && reservation.getDateFin().isBefore(reservation.getDateDebut())) {
+            throw new IllegalArgumentException(
+                    "La date de fin ne peut pas être antérieure à la date de début");
+        }
+        return reservationRepository.save(reservation);
+    }
+
+    @Override
+    public Reservation findById(Long id) {
+        return reservationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation", id));
+    }
+
+    @Override
+    public List<Reservation> findAll() {
         return reservationRepository.findAll();
     }
 
     @Override
-    public Reservation retrieveReservation(Long idReservation) {
-        return reservationRepository.findById(idReservation)
-                .orElseThrow(() -> new RuntimeException("Réservation non trouvée"));
+    public Reservation update(Long id, Reservation reservation) {
+        Reservation existant = findById(id);
+        if (reservation.getDateFin() != null && reservation.getDateDebut() != null
+                && reservation.getDateFin().isBefore(reservation.getDateDebut())) {
+            throw new IllegalArgumentException(
+                    "La date de fin ne peut pas être antérieure à la date de début");
+        }
+        existant.setDateDebut(reservation.getDateDebut());
+        existant.setDateFin(reservation.getDateFin());
+        existant.setStatut(reservation.getStatut());
+        existant.setVehicule(reservation.getVehicule());
+        existant.setClient(reservation.getClient());
+        return reservationRepository.save(existant);
     }
 
     @Override
-    public Reservation addReservation(Reservation reservation) {
-        return reservationRepository.save(reservation);
-    }
-
-    @Override
-    public Reservation updateReservation(Reservation reservation) {
-        return reservationRepository.save(reservation);
-    }
-
-    @Override
-    public void removeReservation(Long idReservation) {
-        reservationRepository.deleteById(idReservation);
-    }
-
-    @Override
-    public List<Reservation> findByStatut(StatutReservation statut) {
-        return reservationRepository.findByStatut(statut);
+    public void deleteById(Long id) {
+        if (!reservationRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Reservation", id);
+        }
+        reservationRepository.deleteById(id);
     }
 }

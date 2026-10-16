@@ -1,75 +1,64 @@
 package tn.esprit.autoloc.autolocapi.service;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import tn.esprit.autoloc.autolocapi.domain.CategorieVehicule;
-import tn.esprit.autoloc.autolocapi.domain.StatutVehicule;
 import tn.esprit.autoloc.autolocapi.domain.Vehicule;
+import tn.esprit.autoloc.autolocapi.exception.ResourceNotFoundException;
 import tn.esprit.autoloc.autolocapi.repository.IVehiculeRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
-@Slf4j
+@RequiredArgsConstructor
 public class VehiculeServiceImpl implements IVehiculeService {
 
     private final IVehiculeRepository vehiculeRepository;
 
     @Override
-    public List<Vehicule> retrieveAllVehicules() {
-        log.info("Récupération de tous les véhicules");
+    public Vehicule create(Vehicule vehicule) {
+        if (vehicule.getIdVehicule() != null) {
+            throw new IllegalArgumentException(
+                    "Un nouveau véhicule ne doit pas avoir d'identifiant");
+        }
+        if (vehicule.getTarifJournalier() != null && vehicule.getTarifJournalier().compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Le tarif journalier ne peut pas être négatif");
+        }
+        return vehiculeRepository.save(vehicule);
+    }
+
+    @Override
+    public Vehicule findById(Long id) {
+        return vehiculeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicule", id));
+    }
+
+    @Override
+    public List<Vehicule> findAll() {
         return vehiculeRepository.findAll();
     }
 
     @Override
-    public Vehicule retrieveVehicule(Long idVehicule) {
-        log.info("Récupération du véhicule avec l'ID: {}", idVehicule);
-        return vehiculeRepository.findById(idVehicule)
-                .orElseThrow(() -> new RuntimeException("Véhicule non trouvé avec l'ID: " + idVehicule));
-    }
-
-    @Override
-    public Vehicule addVehicule(Vehicule vehicule) {
-        log.info("Ajout d'un nouveau véhicule: {} {}", vehicule.getMarque(), vehicule.getModele());
-        return vehiculeRepository.save(vehicule);
-    }
-
-    @Override
-    public Vehicule updateVehicule(Vehicule vehicule) {
-        log.info("Mise à jour du véhicule avec l'ID: {}", vehicule.getIdVehicule());
-        if (!vehiculeRepository.existsById(vehicule.getIdVehicule())) {
-            throw new RuntimeException("Véhicule non trouvé avec l'ID: " + vehicule.getIdVehicule());
+    public Vehicule update(Long id, Vehicule vehicule) {
+        Vehicule existant = findById(id);
+        if (vehicule.getTarifJournalier() != null && vehicule.getTarifJournalier().compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Le tarif journalier ne peut pas être négatif");
         }
-        return vehiculeRepository.save(vehicule);
+        existant.setImmatriculation(vehicule.getImmatriculation());
+        existant.setMarque(vehicule.getMarque());
+        existant.setModele(vehicule.getModele());
+        existant.setCategorie(vehicule.getCategorie());
+        existant.setTarifJournalier(vehicule.getTarifJournalier());
+        existant.setStatut(vehicule.getStatut());
+        existant.setAgence(vehicule.getAgence());
+        return vehiculeRepository.save(existant);
     }
 
     @Override
-    public void removeVehicule(Long idVehicule) {
-        log.info("Suppression du véhicule avec l'ID: {}", idVehicule);
-        if (!vehiculeRepository.existsById(idVehicule)) {
-            throw new RuntimeException("Véhicule non trouvé avec l'ID: " + idVehicule);
+    public void deleteById(Long id) {
+        if (!vehiculeRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Vehicule", id);
         }
-        vehiculeRepository.deleteById(idVehicule);
-    }
-
-    @Override
-    public List<Vehicule> findByStatut(StatutVehicule statut) {
-        log.info("Recherche des véhicules avec le statut: {}", statut);
-        return vehiculeRepository.findByStatut(statut);
-    }
-
-    @Override
-    public List<Vehicule> findByCategorie(CategorieVehicule categorie) {
-        log.info("Recherche des véhicules de la catégorie: {}", categorie);
-        return vehiculeRepository.findByCategorie(categorie);
-    }
-
-    @Override
-    public Vehicule findByImmatriculation(String immatriculation) {
-        log.info("Recherche du véhicule avec l'immatriculation: {}", immatriculation);
-        return vehiculeRepository.findByImmatriculation(immatriculation)
-                .orElseThrow(() -> new RuntimeException("Véhicule non trouvé avec l'immatriculation: " + immatriculation));
+        vehiculeRepository.deleteById(id);
     }
 }

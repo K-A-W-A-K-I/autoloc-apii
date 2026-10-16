@@ -1,68 +1,68 @@
 package tn.esprit.autoloc.autolocapi.service;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.autolocapi.domain.Client;
+import tn.esprit.autoloc.autolocapi.exception.ResourceNotFoundException;
 import tn.esprit.autoloc.autolocapi.repository.IClientRepository;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
-@Slf4j
+@RequiredArgsConstructor
 public class ClientServiceImpl implements IClientService {
 
     private final IClientRepository clientRepository;
 
     @Override
-    public List<Client> retrieveAllClients() {
-        log.info("Récupération de tous les clients");
+    public Client create(Client client) {
+        if (client.getIdClient() != null) {
+            throw new IllegalArgumentException(
+                    "Un nouveau client ne doit pas avoir d'identifiant");
+        }
+        if (client.getNom() == null || client.getNom().trim().isEmpty()) {
+            throw new IllegalArgumentException("Le nom du client est obligatoire");
+        }
+        if (client.getEmail() == null || client.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("L'email du client est obligatoire");
+        }
+        return clientRepository.save(client);
+    }
+
+    @Override
+    public Client findById(Long id) {
+        return clientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Client", id));
+    }
+
+    @Override
+    public List<Client> findAll() {
         return clientRepository.findAll();
     }
 
     @Override
-    public Client retrieveClient(Long idClient) {
-        log.info("Récupération du client avec l'ID: {}", idClient);
-        return clientRepository.findById(idClient)
-                .orElseThrow(() -> new RuntimeException("Client non trouvé avec l'ID: " + idClient));
-    }
-
-    @Override
-    public Client addClient(Client client) {
-        log.info("Ajout d'un nouveau client: {} {}", client.getNom(), client.getPrenom());
-        return clientRepository.save(client);
-    }
-
-    @Override
-    public Client updateClient(Client client) {
-        log.info("Mise à jour du client avec l'ID: {}", client.getIdClient());
-        if (!clientRepository.existsById(client.getIdClient())) {
-            throw new RuntimeException("Client non trouvé avec l'ID: " + client.getIdClient());
+    public Client update(Long id, Client client) {
+        Client existant = findById(id);
+        if (client.getNom() == null || client.getNom().trim().isEmpty()) {
+            throw new IllegalArgumentException("Le nom du client est obligatoire");
         }
-        return clientRepository.save(client);
-    }
-
-    @Override
-    public void removeClient(Long idClient) {
-        log.info("Suppression du client avec l'ID: {}", idClient);
-        if (!clientRepository.existsById(idClient)) {
-            throw new RuntimeException("Client non trouvé avec l'ID: " + idClient);
+        if (client.getEmail() == null || client.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("L'email du client est obligatoire");
         }
-        clientRepository.deleteById(idClient);
+        existant.setNom(client.getNom());
+        existant.setPrenom(client.getPrenom());
+        existant.setEmail(client.getEmail());
+        existant.setTelephone(client.getTelephone());
+        existant.setNumPermis(client.getNumPermis());
+        existant.setDateInscription(client.getDateInscription());
+        return clientRepository.save(existant);
     }
 
     @Override
-    public Client findByEmail(String email) {
-        log.info("Recherche du client avec l'email: {}", email);
-        return clientRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Client non trouvé avec l'email: " + email));
-    }
-
-    @Override
-    public Client findByNumPermis(String numPermis) {
-        log.info("Recherche du client avec le numéro de permis: {}", numPermis);
-        return clientRepository.findByNumPermis(numPermis)
-                .orElseThrow(() -> new RuntimeException("Client non trouvé avec le numéro de permis: " + numPermis));
+    public void deleteById(Long id) {
+        if (!clientRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Client", id);
+        }
+        clientRepository.deleteById(id);
     }
 }
