@@ -25,7 +25,7 @@ public class VehiculeRestController {
      */
     @GetMapping
     public ResponseEntity<List<Vehicule>> getAllVehicules() {
-        List<Vehicule> vehicules = vehiculeService.retrieveAllVehicules();
+        List<Vehicule> vehicules = vehiculeService.findAll();
         return new ResponseEntity<>(vehicules, HttpStatus.OK);
     }
 
@@ -35,7 +35,7 @@ public class VehiculeRestController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Vehicule> getVehiculeById(@PathVariable("id") Long idVehicule) {
-        Vehicule vehicule = vehiculeService.retrieveVehicule(idVehicule);
+        Vehicule vehicule = vehiculeService.findById(idVehicule);
         return new ResponseEntity<>(vehicule, HttpStatus.OK);
     }
 
@@ -45,7 +45,7 @@ public class VehiculeRestController {
      */
     @PostMapping
     public ResponseEntity<Vehicule> addVehicule(@RequestBody Vehicule vehicule) {
-        Vehicule newVehicule = vehiculeService.addVehicule(vehicule);
+        Vehicule newVehicule = vehiculeService.create(vehicule);
         return new ResponseEntity<>(newVehicule, HttpStatus.CREATED);
     }
 
@@ -55,8 +55,7 @@ public class VehiculeRestController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Vehicule> updateVehicule(@PathVariable("id") Long idVehicule, @RequestBody Vehicule vehicule) {
-        vehicule.setIdVehicule(idVehicule);
-        Vehicule updatedVehicule = vehiculeService.updateVehicule(vehicule);
+        Vehicule updatedVehicule = vehiculeService.update(idVehicule, vehicule);
         return new ResponseEntity<>(updatedVehicule, HttpStatus.OK);
     }
 
@@ -66,37 +65,7 @@ public class VehiculeRestController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteVehicule(@PathVariable("id") Long idVehicule) {
-        vehiculeService.removeVehicule(idVehicule);
+        vehiculeService.deleteById(idVehicule);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    /**
-     * Rechercher un véhicule par immatriculation
-     * GET http://localhost:8080/api/vehicules/immatriculation/{immat}
-     */
-    @GetMapping("/immatriculation/{immat}")
-    public ResponseEntity<Vehicule> getVehiculeByImmatriculation(@PathVariable("immat") String immatriculation) {
-        Vehicule vehicule = vehiculeService.findByImmatriculation(immatriculation);
-        return new ResponseEntity<>(vehicule, HttpStatus.OK);
-    }
-
-    /**
-     * Rechercher des véhicules par statut
-     * GET http://localhost:8080/api/vehicules/statut/{statut}
-     */
-    @GetMapping("/statut/{statut}")
-    public ResponseEntity<List<Vehicule>> getVehiculesByStatut(@PathVariable("statut") StatutVehicule statut) {
-        List<Vehicule> vehicules = vehiculeService.findByStatut(statut);
-        return new ResponseEntity<>(vehicules, HttpStatus.OK);
-    }
-
-    /**
-     * Rechercher des véhicules par catégorie
-     * GET http://localhost:8080/api/vehicules/categorie/{categorie}
-     */
-    @GetMapping("/categorie/{categorie}")
-    public ResponseEntity<List<Vehicule>> getVehiculesByCategorie(@PathVariable("categorie") CategorieVehicule categorie) {
-        List<Vehicule> vehicules = vehiculeService.findByCategorie(categorie);
-        return new ResponseEntity<>(vehicules, HttpStatus.OK);
     }
 }

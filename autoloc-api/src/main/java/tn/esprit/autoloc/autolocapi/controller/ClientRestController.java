@@ -23,7 +23,7 @@ public class ClientRestController {
      */
     @GetMapping
     public ResponseEntity<List<Client>> getAllClients() {
-        List<Client> clients = clientService.retrieveAllClients();
+        List<Client> clients = clientService.findAll();
         return new ResponseEntity<>(clients, HttpStatus.OK);
     }
 
@@ -33,7 +33,7 @@ public class ClientRestController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Client> getClientById(@PathVariable("id") Long idClient) {
-        Client client = clientService.retrieveClient(idClient);
+        Client client = clientService.findById(idClient);
         return new ResponseEntity<>(client, HttpStatus.OK);
     }
 
@@ -43,7 +43,7 @@ public class ClientRestController {
      */
     @PostMapping
     public ResponseEntity<Client> addClient(@RequestBody Client client) {
-        Client newClient = clientService.addClient(client);
+        Client newClient = clientService.create(client);
         return new ResponseEntity<>(newClient, HttpStatus.CREATED);
     }
 
@@ -53,8 +53,7 @@ public class ClientRestController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Client> updateClient(@PathVariable("id") Long idClient, @RequestBody Client client) {
-        client.setIdClient(idClient);
-        Client updatedClient = clientService.updateClient(client);
+        Client updatedClient = clientService.update(idClient, client);
         return new ResponseEntity<>(updatedClient, HttpStatus.OK);
     }
 
@@ -64,27 +63,7 @@ public class ClientRestController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteClient(@PathVariable("id") Long idClient) {
-        clientService.removeClient(idClient);
+        clientService.deleteById(idClient);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    /**
-     * Rechercher un client par email
-     * GET http://localhost:8080/api/clients/email/{email}
-     */
-    @GetMapping("/email/{email}")
-    public ResponseEntity<Client> getClientByEmail(@PathVariable("email") String email) {
-        Client client = clientService.findByEmail(email);
-        return new ResponseEntity<>(client, HttpStatus.OK);
-    }
-
-    /**
-     * Rechercher un client par numéro de permis
-     * GET http://localhost:8080/api/clients/permis/{numPermis}
-     */
-    @GetMapping("/permis/{numPermis}")
-    public ResponseEntity<Client> getClientByNumPermis(@PathVariable("numPermis") String numPermis) {
-        Client client = clientService.findByNumPermis(numPermis);
-        return new ResponseEntity<>(client, HttpStatus.OK);
     }
 }
