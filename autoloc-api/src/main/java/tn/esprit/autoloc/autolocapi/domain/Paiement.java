@@ -1,5 +1,6 @@
 package tn.esprit.autoloc.autolocapi.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -24,5 +25,6 @@ public class Paiement {
   private ModePaiement modePaiement;
 
   @ManyToOne
+  @JsonIgnore
   private Contrat contrat;
 }
