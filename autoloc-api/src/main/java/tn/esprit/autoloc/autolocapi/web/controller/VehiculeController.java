@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 import tn.esprit.autoloc.autolocapi.service.IVehiculeService;
 import tn.esprit.autoloc.autolocapi.web.dto.VehiculeDTO;
 
@@ -45,7 +46,7 @@ public class VehiculeController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public VehiculeDTO create(@Parameter(description = "Véhicule à créer") @RequestBody VehiculeDTO vehiculeDTO) {
+    public VehiculeDTO create(@Parameter(description = "Véhicule à créer") @Valid @RequestBody VehiculeDTO vehiculeDTO) {
         return vehiculeService.create(vehiculeDTO);
     }
 
@@ -58,7 +59,7 @@ public class VehiculeController {
     @PutMapping("/{id}")
     public VehiculeDTO update(
             @Parameter(description = "Identifiant du véhicule") @PathVariable Long id,
-            @Parameter(description = "Nouvelles données du véhicule") @RequestBody VehiculeDTO vehiculeDTO) {
+            @Parameter(description = "Nouvelles données du véhicule") @Valid @RequestBody VehiculeDTO vehiculeDTO) {
         return vehiculeService.update(id, vehiculeDTO);
     }
 

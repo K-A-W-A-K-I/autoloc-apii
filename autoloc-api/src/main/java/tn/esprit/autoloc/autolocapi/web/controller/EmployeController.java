@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 import tn.esprit.autoloc.autolocapi.service.IEmployeService;
 import tn.esprit.autoloc.autolocapi.web.dto.EmployeDTO;
 
@@ -45,7 +46,7 @@ public class EmployeController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EmployeDTO create(@Parameter(description = "Employé à créer") @RequestBody EmployeDTO employeDTO) {
+    public EmployeDTO create(@Parameter(description = "Employé à créer") @Valid @RequestBody EmployeDTO employeDTO) {
         return employeService.create(employeDTO);
     }
 
@@ -58,7 +59,7 @@ public class EmployeController {
     @PutMapping("/{id}")
     public EmployeDTO update(
             @Parameter(description = "Identifiant de l'employé") @PathVariable Long id,
-            @Parameter(description = "Nouvelles données de l'employé") @RequestBody EmployeDTO employeDTO) {
+            @Parameter(description = "Nouvelles données de l'employé") @Valid @RequestBody EmployeDTO employeDTO) {
         return employeService.update(id, employeDTO);
     }
 

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 import tn.esprit.autoloc.autolocapi.service.IReservationService;
 import tn.esprit.autoloc.autolocapi.web.dto.ReservationDTO;
 
@@ -45,7 +46,7 @@ public class ReservationController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ReservationDTO create(@Parameter(description = "Réservation à créer") @RequestBody ReservationDTO reservationDTO) {
+    public ReservationDTO create(@Parameter(description = "Réservation à créer") @Valid @RequestBody ReservationDTO reservationDTO) {
         return reservationService.create(reservationDTO);
     }
 
@@ -58,7 +59,7 @@ public class ReservationController {
     @PutMapping("/{id}")
     public ReservationDTO update(
             @Parameter(description = "Identifiant de la réservation") @PathVariable Long id,
-            @Parameter(description = "Nouvelles données de la réservation") @RequestBody ReservationDTO reservationDTO) {
+            @Parameter(description = "Nouvelles données de la réservation") @Valid @RequestBody ReservationDTO reservationDTO) {
         return reservationService.update(id, reservationDTO);
     }
 

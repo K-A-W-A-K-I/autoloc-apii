@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 import tn.esprit.autoloc.autolocapi.service.IContratService;
 import tn.esprit.autoloc.autolocapi.web.dto.ContratDTO;
 
@@ -45,7 +46,7 @@ public class ContratController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ContratDTO create(@Parameter(description = "Contrat à créer") @RequestBody ContratDTO contratDTO) {
+    public ContratDTO create(@Parameter(description = "Contrat à créer") @Valid @RequestBody ContratDTO contratDTO) {
         return contratService.create(contratDTO);
     }
 
@@ -58,7 +59,7 @@ public class ContratController {
     @PutMapping("/{id}")
     public ContratDTO update(
             @Parameter(description = "Identifiant du contrat") @PathVariable Long id,
-            @Parameter(description = "Nouvelles données du contrat") @RequestBody ContratDTO contratDTO) {
+            @Parameter(description = "Nouvelles données du contrat") @Valid @RequestBody ContratDTO contratDTO) {
         return contratService.update(id, contratDTO);
     }
 

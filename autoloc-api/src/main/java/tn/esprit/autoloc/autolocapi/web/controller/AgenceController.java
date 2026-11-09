@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 import tn.esprit.autoloc.autolocapi.service.IAgenceService;
 import tn.esprit.autoloc.autolocapi.web.dto.AgenceDTO;
 
@@ -45,7 +46,7 @@ public class AgenceController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AgenceDTO create(@Parameter(description = "Agence à créer") @RequestBody AgenceDTO agenceDTO) {
+    public AgenceDTO create(@Parameter(description = "Agence à créer") @Valid @RequestBody AgenceDTO agenceDTO) {
         return agenceService.create(agenceDTO);
     }
 
@@ -58,7 +59,7 @@ public class AgenceController {
     @PutMapping("/{id}")
     public AgenceDTO update(
             @Parameter(description = "Identifiant de l'agence") @PathVariable Long id,
-            @Parameter(description = "Nouvelles données de l'agence") @RequestBody AgenceDTO agenceDTO) {
+            @Parameter(description = "Nouvelles données de l'agence") @Valid @RequestBody AgenceDTO agenceDTO) {
         return agenceService.update(id, agenceDTO);
     }
 

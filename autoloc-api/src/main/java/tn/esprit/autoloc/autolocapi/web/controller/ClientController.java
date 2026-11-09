@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 import tn.esprit.autoloc.autolocapi.service.IClientService;
 import tn.esprit.autoloc.autolocapi.web.dto.ClientDTO;
 
@@ -45,7 +46,7 @@ public class ClientController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ClientDTO create(@Parameter(description = "Client à créer") @RequestBody ClientDTO clientDTO) {
+    public ClientDTO create(@Parameter(description = "Client à créer") @Valid @RequestBody ClientDTO clientDTO) {
         return clientService.create(clientDTO);
     }
 
@@ -58,7 +59,7 @@ public class ClientController {
     @PutMapping("/{id}")
     public ClientDTO update(
             @Parameter(description = "Identifiant du client") @PathVariable Long id,
-            @Parameter(description = "Nouvelles données du client") @RequestBody ClientDTO clientDTO) {
+            @Parameter(description = "Nouvelles données du client") @Valid @RequestBody ClientDTO clientDTO) {
         return clientService.update(id, clientDTO);
     }
 

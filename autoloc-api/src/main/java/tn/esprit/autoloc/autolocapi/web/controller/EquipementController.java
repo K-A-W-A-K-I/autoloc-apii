@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 import tn.esprit.autoloc.autolocapi.service.IEquipementService;
 import tn.esprit.autoloc.autolocapi.web.dto.EquipementDTO;
 
@@ -45,7 +46,7 @@ public class EquipementController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EquipementDTO create(@Parameter(description = "Équipement à créer") @RequestBody EquipementDTO equipementDTO) {
+    public EquipementDTO create(@Parameter(description = "Équipement à créer") @Valid @RequestBody EquipementDTO equipementDTO) {
         return equipementService.create(equipementDTO);
     }
 
@@ -58,7 +59,7 @@ public class EquipementController {
     @PutMapping("/{id}")
     public EquipementDTO update(
             @Parameter(description = "Identifiant de l'équipement") @PathVariable Long id,
-            @Parameter(description = "Nouvelles données de l'équipement") @RequestBody EquipementDTO equipementDTO) {
+            @Parameter(description = "Nouvelles données de l'équipement") @Valid @RequestBody EquipementDTO equipementDTO) {
         return equipementService.update(id, equipementDTO);
     }
 

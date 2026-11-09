@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 import tn.esprit.autoloc.autolocapi.service.IMaintenanceService;
 import tn.esprit.autoloc.autolocapi.web.dto.MaintenanceDTO;
 
@@ -45,7 +46,7 @@ public class MaintenanceController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public MaintenanceDTO create(@Parameter(description = "Maintenance à créer") @RequestBody MaintenanceDTO maintenanceDTO) {
+    public MaintenanceDTO create(@Parameter(description = "Maintenance à créer") @Valid @RequestBody MaintenanceDTO maintenanceDTO) {
         return maintenanceService.create(maintenanceDTO);
     }
 
@@ -58,7 +59,7 @@ public class MaintenanceController {
     @PutMapping("/{id}")
     public MaintenanceDTO update(
             @Parameter(description = "Identifiant de la maintenance") @PathVariable Long id,
-            @Parameter(description = "Nouvelles données de la maintenance") @RequestBody MaintenanceDTO maintenanceDTO) {
+            @Parameter(description = "Nouvelles données de la maintenance") @Valid @RequestBody MaintenanceDTO maintenanceDTO) {
         return maintenanceService.update(id, maintenanceDTO);
     }
 
