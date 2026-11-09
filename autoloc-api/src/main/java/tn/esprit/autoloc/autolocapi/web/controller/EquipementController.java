@@ -8,8 +8,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.autoloc.autolocapi.domain.Equipement;
 import tn.esprit.autoloc.autolocapi.service.IEquipementService;
+import tn.esprit.autoloc.autolocapi.web.dto.EquipementDTO;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class EquipementController {
     @Operation(summary = "Lister tous les équipements")
     @ApiResponse(responseCode = "200", description = "Liste des équipements retournée avec succès")
     @GetMapping
-    public List<Equipement> findAll() {
+    public List<EquipementDTO> findAll() {
         return equipementService.findAll();
     }
 
@@ -34,7 +34,7 @@ public class EquipementController {
             @ApiResponse(responseCode = "404", description = "Équipement introuvable")
     })
     @GetMapping("/{id}")
-    public Equipement findById(@Parameter(description = "Identifiant de l'équipement") @PathVariable Long id) {
+    public EquipementDTO findById(@Parameter(description = "Identifiant de l'équipement") @PathVariable Long id) {
         return equipementService.findById(id);
     }
 
@@ -45,8 +45,8 @@ public class EquipementController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Equipement create(@Parameter(description = "Équipement à créer") @RequestBody Equipement equipement) {
-        return equipementService.create(equipement);
+    public EquipementDTO create(@Parameter(description = "Équipement à créer") @RequestBody EquipementDTO equipementDTO) {
+        return equipementService.create(equipementDTO);
     }
 
     @Operation(summary = "Modifier un équipement existant")
@@ -56,10 +56,10 @@ public class EquipementController {
             @ApiResponse(responseCode = "400", description = "Données invalides")
     })
     @PutMapping("/{id}")
-    public Equipement update(
+    public EquipementDTO update(
             @Parameter(description = "Identifiant de l'équipement") @PathVariable Long id,
-            @Parameter(description = "Nouvelles données de l'équipement") @RequestBody Equipement equipement) {
-        return equipementService.update(id, equipement);
+            @Parameter(description = "Nouvelles données de l'équipement") @RequestBody EquipementDTO equipementDTO) {
+        return equipementService.update(id, equipementDTO);
     }
 
     @Operation(summary = "Supprimer un équipement")

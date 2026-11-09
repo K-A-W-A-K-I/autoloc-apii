@@ -8,8 +8,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.autoloc.autolocapi.domain.Agence;
 import tn.esprit.autoloc.autolocapi.service.IAgenceService;
+import tn.esprit.autoloc.autolocapi.web.dto.AgenceDTO;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class AgenceController {
     @Operation(summary = "Lister toutes les agences")
     @ApiResponse(responseCode = "200", description = "Liste des agences retournée avec succès")
     @GetMapping
-    public List<Agence> findAll() {
+    public List<AgenceDTO> findAll() {
         return agenceService.findAll();
     }
 
@@ -34,7 +34,7 @@ public class AgenceController {
             @ApiResponse(responseCode = "404", description = "Agence introuvable")
     })
     @GetMapping("/{id}")
-    public Agence findById(@Parameter(description = "Identifiant de l'agence") @PathVariable Long id) {
+    public AgenceDTO findById(@Parameter(description = "Identifiant de l'agence") @PathVariable Long id) {
         return agenceService.findById(id);
     }
 
@@ -45,8 +45,8 @@ public class AgenceController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Agence create(@Parameter(description = "Agence à créer") @RequestBody Agence agence) {
-        return agenceService.create(agence);
+    public AgenceDTO create(@Parameter(description = "Agence à créer") @RequestBody AgenceDTO agenceDTO) {
+        return agenceService.create(agenceDTO);
     }
 
     @Operation(summary = "Modifier une agence existante")
@@ -56,10 +56,10 @@ public class AgenceController {
             @ApiResponse(responseCode = "400", description = "Données invalides")
     })
     @PutMapping("/{id}")
-    public Agence update(
+    public AgenceDTO update(
             @Parameter(description = "Identifiant de l'agence") @PathVariable Long id,
-            @Parameter(description = "Nouvelles données de l'agence") @RequestBody Agence agence) {
-        return agenceService.update(id, agence);
+            @Parameter(description = "Nouvelles données de l'agence") @RequestBody AgenceDTO agenceDTO) {
+        return agenceService.update(id, agenceDTO);
     }
 
     @Operation(summary = "Supprimer une agence")

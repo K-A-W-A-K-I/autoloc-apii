@@ -8,8 +8,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.autoloc.autolocapi.domain.Maintenance;
 import tn.esprit.autoloc.autolocapi.service.IMaintenanceService;
+import tn.esprit.autoloc.autolocapi.web.dto.MaintenanceDTO;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class MaintenanceController {
     @Operation(summary = "Lister toutes les maintenances")
     @ApiResponse(responseCode = "200", description = "Liste des maintenances retournée avec succès")
     @GetMapping
-    public List<Maintenance> findAll() {
+    public List<MaintenanceDTO> findAll() {
         return maintenanceService.findAll();
     }
 
@@ -34,7 +34,7 @@ public class MaintenanceController {
             @ApiResponse(responseCode = "404", description = "Maintenance introuvable")
     })
     @GetMapping("/{id}")
-    public Maintenance findById(@Parameter(description = "Identifiant de la maintenance") @PathVariable Long id) {
+    public MaintenanceDTO findById(@Parameter(description = "Identifiant de la maintenance") @PathVariable Long id) {
         return maintenanceService.findById(id);
     }
 
@@ -45,8 +45,8 @@ public class MaintenanceController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Maintenance create(@Parameter(description = "Maintenance à créer") @RequestBody Maintenance maintenance) {
-        return maintenanceService.create(maintenance);
+    public MaintenanceDTO create(@Parameter(description = "Maintenance à créer") @RequestBody MaintenanceDTO maintenanceDTO) {
+        return maintenanceService.create(maintenanceDTO);
     }
 
     @Operation(summary = "Modifier une maintenance existante")
@@ -56,10 +56,10 @@ public class MaintenanceController {
             @ApiResponse(responseCode = "400", description = "Données invalides")
     })
     @PutMapping("/{id}")
-    public Maintenance update(
+    public MaintenanceDTO update(
             @Parameter(description = "Identifiant de la maintenance") @PathVariable Long id,
-            @Parameter(description = "Nouvelles données de la maintenance") @RequestBody Maintenance maintenance) {
-        return maintenanceService.update(id, maintenance);
+            @Parameter(description = "Nouvelles données de la maintenance") @RequestBody MaintenanceDTO maintenanceDTO) {
+        return maintenanceService.update(id, maintenanceDTO);
     }
 
     @Operation(summary = "Supprimer une maintenance")

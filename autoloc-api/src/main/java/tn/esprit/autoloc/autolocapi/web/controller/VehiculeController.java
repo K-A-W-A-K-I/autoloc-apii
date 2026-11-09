@@ -8,8 +8,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.autoloc.autolocapi.domain.Vehicule;
 import tn.esprit.autoloc.autolocapi.service.IVehiculeService;
+import tn.esprit.autoloc.autolocapi.web.dto.VehiculeDTO;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class VehiculeController {
     @Operation(summary = "Lister tous les véhicules")
     @ApiResponse(responseCode = "200", description = "Liste des véhicules retournée avec succès")
     @GetMapping
-    public List<Vehicule> findAll() {
+    public List<VehiculeDTO> findAll() {
         return vehiculeService.findAll();
     }
 
@@ -34,7 +34,7 @@ public class VehiculeController {
             @ApiResponse(responseCode = "404", description = "Véhicule introuvable")
     })
     @GetMapping("/{id}")
-    public Vehicule findById(@Parameter(description = "Identifiant du véhicule") @PathVariable Long id) {
+    public VehiculeDTO findById(@Parameter(description = "Identifiant du véhicule") @PathVariable Long id) {
         return vehiculeService.findById(id);
     }
 
@@ -45,8 +45,8 @@ public class VehiculeController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Vehicule create(@Parameter(description = "Véhicule à créer") @RequestBody Vehicule vehicule) {
-        return vehiculeService.create(vehicule);
+    public VehiculeDTO create(@Parameter(description = "Véhicule à créer") @RequestBody VehiculeDTO vehiculeDTO) {
+        return vehiculeService.create(vehiculeDTO);
     }
 
     @Operation(summary = "Modifier un véhicule existant")
@@ -56,10 +56,10 @@ public class VehiculeController {
             @ApiResponse(responseCode = "400", description = "Données invalides")
     })
     @PutMapping("/{id}")
-    public Vehicule update(
+    public VehiculeDTO update(
             @Parameter(description = "Identifiant du véhicule") @PathVariable Long id,
-            @Parameter(description = "Nouvelles données du véhicule") @RequestBody Vehicule vehicule) {
-        return vehiculeService.update(id, vehicule);
+            @Parameter(description = "Nouvelles données du véhicule") @RequestBody VehiculeDTO vehiculeDTO) {
+        return vehiculeService.update(id, vehiculeDTO);
     }
 
     @Operation(summary = "Supprimer un véhicule")

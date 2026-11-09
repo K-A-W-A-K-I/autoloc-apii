@@ -8,8 +8,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.autoloc.autolocapi.domain.Contrat;
 import tn.esprit.autoloc.autolocapi.service.IContratService;
+import tn.esprit.autoloc.autolocapi.web.dto.ContratDTO;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class ContratController {
     @Operation(summary = "Lister tous les contrats")
     @ApiResponse(responseCode = "200", description = "Liste des contrats retournée avec succès")
     @GetMapping
-    public List<Contrat> findAll() {
+    public List<ContratDTO> findAll() {
         return contratService.findAll();
     }
 
@@ -34,7 +34,7 @@ public class ContratController {
             @ApiResponse(responseCode = "404", description = "Contrat introuvable")
     })
     @GetMapping("/{id}")
-    public Contrat findById(@Parameter(description = "Identifiant du contrat") @PathVariable Long id) {
+    public ContratDTO findById(@Parameter(description = "Identifiant du contrat") @PathVariable Long id) {
         return contratService.findById(id);
     }
 
@@ -45,8 +45,8 @@ public class ContratController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Contrat create(@Parameter(description = "Contrat à créer") @RequestBody Contrat contrat) {
-        return contratService.create(contrat);
+    public ContratDTO create(@Parameter(description = "Contrat à créer") @RequestBody ContratDTO contratDTO) {
+        return contratService.create(contratDTO);
     }
 
     @Operation(summary = "Modifier un contrat existant")
@@ -56,10 +56,10 @@ public class ContratController {
             @ApiResponse(responseCode = "400", description = "Données invalides")
     })
     @PutMapping("/{id}")
-    public Contrat update(
+    public ContratDTO update(
             @Parameter(description = "Identifiant du contrat") @PathVariable Long id,
-            @Parameter(description = "Nouvelles données du contrat") @RequestBody Contrat contrat) {
-        return contratService.update(id, contrat);
+            @Parameter(description = "Nouvelles données du contrat") @RequestBody ContratDTO contratDTO) {
+        return contratService.update(id, contratDTO);
     }
 
     @Operation(summary = "Supprimer un contrat")

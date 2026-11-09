@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.autolocapi.domain.Paiement;
 import tn.esprit.autoloc.autolocapi.exception.ResourceNotFoundException;
 import tn.esprit.autoloc.autolocapi.repository.IPaiementRepository;
+import tn.esprit.autoloc.autolocapi.web.dto.PaiementDTO;
+import tn.esprit.autoloc.autolocapi.web.mapper.PaiementMapper;
 
 import java.util.List;
 
@@ -13,15 +15,18 @@ import java.util.List;
 public class PaiementServiceImpl implements IPaiementService {
 
     private final IPaiementRepository paiementRepository;
+    private final PaiementMapper paiementMapper;
 
     @Override
-    public Paiement findById(Long id) {
-        return paiementRepository.findById(id)
+    public PaiementDTO findById(Long id) {
+        Paiement paiement = paiementRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Paiement", id));
+        return paiementMapper.toDTO(paiement);
     }
 
     @Override
-    public List<Paiement> findAll() {
-        return paiementRepository.findAll();
+    public List<PaiementDTO> findAll() {
+        List<Paiement> paiements = paiementRepository.findAll();
+        return paiementMapper.toDTOList(paiements);
     }
 }

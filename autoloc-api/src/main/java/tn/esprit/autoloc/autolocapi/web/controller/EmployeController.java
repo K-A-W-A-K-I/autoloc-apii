@@ -8,8 +8,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.autoloc.autolocapi.domain.Employe;
 import tn.esprit.autoloc.autolocapi.service.IEmployeService;
+import tn.esprit.autoloc.autolocapi.web.dto.EmployeDTO;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class EmployeController {
     @Operation(summary = "Lister tous les employés")
     @ApiResponse(responseCode = "200", description = "Liste des employés retournée avec succès")
     @GetMapping
-    public List<Employe> findAll() {
+    public List<EmployeDTO> findAll() {
         return employeService.findAll();
     }
 
@@ -34,7 +34,7 @@ public class EmployeController {
             @ApiResponse(responseCode = "404", description = "Employé introuvable")
     })
     @GetMapping("/{id}")
-    public Employe findById(@Parameter(description = "Identifiant de l'employé") @PathVariable Long id) {
+    public EmployeDTO findById(@Parameter(description = "Identifiant de l'employé") @PathVariable Long id) {
         return employeService.findById(id);
     }
 
@@ -45,8 +45,8 @@ public class EmployeController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Employe create(@Parameter(description = "Employé à créer") @RequestBody Employe employe) {
-        return employeService.create(employe);
+    public EmployeDTO create(@Parameter(description = "Employé à créer") @RequestBody EmployeDTO employeDTO) {
+        return employeService.create(employeDTO);
     }
 
     @Operation(summary = "Modifier un employé existant")
@@ -56,10 +56,10 @@ public class EmployeController {
             @ApiResponse(responseCode = "400", description = "Données invalides")
     })
     @PutMapping("/{id}")
-    public Employe update(
+    public EmployeDTO update(
             @Parameter(description = "Identifiant de l'employé") @PathVariable Long id,
-            @Parameter(description = "Nouvelles données de l'employé") @RequestBody Employe employe) {
-        return employeService.update(id, employe);
+            @Parameter(description = "Nouvelles données de l'employé") @RequestBody EmployeDTO employeDTO) {
+        return employeService.update(id, employeDTO);
     }
 
     @Operation(summary = "Supprimer un employé")

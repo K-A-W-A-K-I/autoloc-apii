@@ -8,8 +8,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import tn.esprit.autoloc.autolocapi.domain.Reservation;
 import tn.esprit.autoloc.autolocapi.service.IReservationService;
+import tn.esprit.autoloc.autolocapi.web.dto.ReservationDTO;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class ReservationController {
     @Operation(summary = "Lister toutes les réservations")
     @ApiResponse(responseCode = "200", description = "Liste des réservations retournée avec succès")
     @GetMapping
-    public List<Reservation> findAll() {
+    public List<ReservationDTO> findAll() {
         return reservationService.findAll();
     }
 
@@ -34,7 +34,7 @@ public class ReservationController {
             @ApiResponse(responseCode = "404", description = "Réservation introuvable")
     })
     @GetMapping("/{id}")
-    public Reservation findById(@Parameter(description = "Identifiant de la réservation") @PathVariable Long id) {
+    public ReservationDTO findById(@Parameter(description = "Identifiant de la réservation") @PathVariable Long id) {
         return reservationService.findById(id);
     }
 
@@ -45,8 +45,8 @@ public class ReservationController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Reservation create(@Parameter(description = "Réservation à créer") @RequestBody Reservation reservation) {
-        return reservationService.create(reservation);
+    public ReservationDTO create(@Parameter(description = "Réservation à créer") @RequestBody ReservationDTO reservationDTO) {
+        return reservationService.create(reservationDTO);
     }
 
     @Operation(summary = "Modifier une réservation existante")
@@ -56,10 +56,10 @@ public class ReservationController {
             @ApiResponse(responseCode = "400", description = "Données invalides")
     })
     @PutMapping("/{id}")
-    public Reservation update(
+    public ReservationDTO update(
             @Parameter(description = "Identifiant de la réservation") @PathVariable Long id,
-            @Parameter(description = "Nouvelles données de la réservation") @RequestBody Reservation reservation) {
-        return reservationService.update(id, reservation);
+            @Parameter(description = "Nouvelles données de la réservation") @RequestBody ReservationDTO reservationDTO) {
+        return reservationService.update(id, reservationDTO);
     }
 
     @Operation(summary = "Supprimer une réservation")

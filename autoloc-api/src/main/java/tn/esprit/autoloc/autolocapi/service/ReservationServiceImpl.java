@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.autolocapi.domain.Reservation;
 import tn.esprit.autoloc.autolocapi.exception.ResourceNotFoundException;
 import tn.esprit.autoloc.autolocapi.repository.IReservationRepository;
+import tn.esprit.autoloc.autolocapi.web.dto.ReservationDTO;
+import tn.esprit.autoloc.autolocapi.web.mapper.ReservationMapper;
 
 import java.util.List;
 
@@ -13,46 +15,54 @@ import java.util.List;
 public class ReservationServiceImpl implements IReservationService {
 
     private final IReservationRepository reservationRepository;
+    private final ReservationMapper reservationMapper;
 
     @Override
-    public Reservation create(Reservation reservation) {
-        if (reservation.getIdReservation() != null) {
+    public ReservationDTO create(ReservationDTO reservationDTO) {
+        if (reservationDTO.getIdReservation() != null) {
             throw new IllegalArgumentException(
                     "Une nouvelle réservation ne doit pas avoir d'identifiant");
         }
-        if (reservation.getDateFin() != null && reservation.getDateDebut() != null
-                && reservation.getDateFin().isBefore(reservation.getDateDebut())) {
+        if (reservationDTO.getDateFin() != null && reservationDTO.getDateDebut() != null
+                && reservationDTO.getDateFin().isBefore(reservationDTO.getDateDebut())) {
             throw new IllegalArgumentException(
                     "La date de fin ne peut pas être antérieure à la date de début");
         }
-        return reservationRepository.save(reservation);
+        Reservation reservation = reservationMapper.toEntity(reservationDTO);
+        Reservation saved = reservationRepository.save(reservation);
+        return reservationMapper.toDTO(saved);
     }
 
     @Override
-    public Reservation findById(Long id) {
-        return reservationRepository.findById(id)
+    public ReservationDTO findById(Long id) {
+        Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reservation", id));
+        return reservationMapper.toDTO(reservation);
     }
 
     @Override
-    public List<Reservation> findAll() {
-        return reservationRepository.findAll();
+    public List<ReservationDTO> findAll() {
+        List<Reservation> reservations = reservationRepository.findAll();
+        return reservationMapper.toDTOList(reservations);
     }
 
     @Override
-    public Reservation update(Long id, Reservation reservation) {
-        Reservation existant = findById(id);
-        if (reservation.getDateFin() != null && reservation.getDateDebut() != null
-                && reservation.getDateFin().isBefore(reservation.getDateDebut())) {
+    public ReservationDTO update(Long id, ReservationDTO reservationDTO) {
+        Reservation existant = reservationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation", id));
+        if (reservationDTO.getDateFin() != null && reservationDTO.getDateDebut() != null
+                && reservationDTO.getDateFin().isBefore(reservationDTO.getDateDebut())) {
             throw new IllegalArgumentException(
                     "La date de fin ne peut pas être antérieure à la date de début");
         }
-        existant.setDateDebut(reservation.getDateDebut());
-        existant.setDateFin(reservation.getDateFin());
-        existant.setStatut(reservation.getStatut());
-        existant.setVehicule(reservation.getVehicule());
-        existant.setClient(reservation.getClient());
-        return reservationRepository.save(existant);
+        existant.setDateDebut(reservationDTO.getDateDebut());
+        existant.setDateFin(reservationDTO.getDateFin());
+        existant.setStatut(reservationDTO.getStatut());
+        Reservation fromDTO = reservationMapper.toEntity(reservationDTO);
+        existant.setVehicule(fromDTO.getVehicule());
+        existant.setClient(fromDTO.getClient());
+        Reservation updated = reservationRepository.save(existant);
+        return reservationMapper.toDTO(updated);
     }
 
     @Override
